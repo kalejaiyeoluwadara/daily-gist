@@ -7,7 +7,6 @@ import GistSkeleton from "@/components/GistSkeleton";
 import RefreshButton from "@/components/RefreshButton";
 import NuggyMascot from "@/components/NuggyMascot";
 import SpeechBubble from "@/components/SpeechBubble";
-import CategorySelector from "@/components/CategorySelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import StatsModal from "@/components/StatsModal";
 import BottomNav from "@/components/BottomNav";
@@ -339,13 +338,6 @@ export default function Home() {
         
         {activeTab === "feed" && (
           <>
-            {/* Category Selector */}
-            <CategorySelector
-              selectedId={category}
-              onSelect={handleCategorySelect}
-              disabled={isLoading}
-            />
-
             {/* Mascot & Speech Bubble */}
             <div className="flex flex-col items-center gap-4 w-full select-none mt-2">
               <SpeechBubble text={speechText} />
@@ -430,9 +422,8 @@ export default function Home() {
       <BottomNav
         currentTab={activeTab}
         onTabChange={setActiveTab}
-        isSpeaking={isSpeaking}
-        onVoiceClick={toggleVoice}
-        hasVoiceSupport={hasVoiceSupport}
+        selectedCategory={category}
+        onCategorySelect={handleCategorySelect}
       />
 
       {/* Stats Modal Animations */}
