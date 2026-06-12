@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -14,9 +14,23 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#FF8E75",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: "Daily Gist 🍪 Today's Nugget of Knowledge",
   description: "Get a random, interesting fact from Wikipedia, gisted into a short, casual, shareable nugget of knowledge.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Daily Gist",
+  },
 };
 
 export default function RootLayout({
