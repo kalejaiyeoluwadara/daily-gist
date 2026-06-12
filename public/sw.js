@@ -4,6 +4,7 @@ const ASSETS_TO_CACHE = [
   "/manifest.json",
   "/icon.png",
   "/apple-icon.png",
+  "/hn_fallback.png",
 ];
 
 self.addEventListener("install", (event) => {

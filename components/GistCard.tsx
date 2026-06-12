@@ -6,6 +6,7 @@ interface GistData {
   gist: string;
   thumbnail: string | null;
   url: string;
+  source?: string;
 }
 
 interface GistCardProps {
@@ -13,7 +14,8 @@ interface GistCardProps {
 }
 
 export default function GistCard({ data }: GistCardProps) {
-  const { title, gist, thumbnail, url } = data;
+  const { title, gist, thumbnail, url, source = "Wikipedia" } = data;
+  const cardThumbnail = thumbnail || (source === "Hacker News" ? "/hn_fallback.png" : null);
   const [isSaved, setIsSaved] = useState(false);
 
   // Check if current fact is saved in local storage on title change
@@ -35,7 +37,7 @@ export default function GistCard({ data }: GistCardProps) {
       list = list.filter((item: any) => item.title !== title);
       setIsSaved(false);
     } else {
-      list.push({ title, gist, thumbnail, url });
+      list.push({ title, gist, thumbnail, url, source });
       setIsSaved(true);
     }
     
@@ -46,9 +48,9 @@ export default function GistCard({ data }: GistCardProps) {
     <div className="w-full max-w-[440px] bg-card border-[3px] border-[#2C1D11] dark:border-zinc-800 rounded-3xl overflow-hidden shadow-[0_6px_0_0_#2C1D11] dark:shadow-[0_6px_0_0_rgba(0,0,0,0.4)] transition-all duration-150 flex flex-col hover:-translate-y-0.5 hover:shadow-[0_8px_0_0_#2C1D11] dark:hover:shadow-[0_8px_0_0_rgba(0,0,0,0.45)]">
       {/* Card Media Header */}
       <div className="w-full aspect-[4/3] relative bg-[#f4edd9] dark:bg-[#1a1715] overflow-hidden border-b-[3px] border-[#2C1D11] dark:border-zinc-800">
-        {thumbnail ? (
+        {cardThumbnail ? (
           <img
-            src={thumbnail}
+            src={cardThumbnail}
             alt={title}
             className="w-full h-full object-cover select-none"
             loading="lazy"
@@ -61,7 +63,7 @@ export default function GistCard({ data }: GistCardProps) {
               <BookOpenIcon className="w-8 h-8" />
             </div>
             <span className="font-serif text-sm tracking-wider uppercase text-foreground/45 dark:text-foreground/50">
-              Encyclopedia Article
+              {source === "Hacker News" ? "Tech News Story" : "Encyclopedia Article"}
             </span>
           </div>
         )}
@@ -79,7 +81,7 @@ export default function GistCard({ data }: GistCardProps) {
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#2C1D11] dark:bg-zinc-800" />
               <span className="font-sans text-xs text-foreground/50 dark:text-foreground/40 font-bold uppercase tracking-widest select-none">
-                Wiki Gist
+                {source === "Hacker News" ? "HN Gist" : "Wiki Gist"}
               </span>
             </div>
 
@@ -116,7 +118,7 @@ export default function GistCard({ data }: GistCardProps) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 font-sans text-sm font-black text-foreground/70 hover:text-coral transition-colors duration-200 border-b-2 border-dashed border-foreground/30 hover:border-coral select-none"
           >
-            <span>Read more on Wikipedia</span>
+            <span>Read more on {source}</span>
             <ExternalLinkIcon className="w-4 h-4" />
           </a>
         </div>

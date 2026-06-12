@@ -19,6 +19,7 @@ interface GistData {
   gist: string;
   thumbnail: string | null;
   url: string;
+  source?: string;
 }
 
 const LOADING_PHRASES = [

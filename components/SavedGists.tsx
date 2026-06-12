@@ -8,6 +8,7 @@ interface SavedGist {
   gist: string;
   url: string;
   thumbnail: string | null;
+  source?: string;
 }
 
 interface SavedGistsProps {
@@ -47,23 +48,25 @@ export default function SavedGists({ onRemoveItem }: SavedGistsProps) {
 
   return (
     <div className="w-full max-w-[440px] flex flex-col gap-4 max-h-[50vh] overflow-y-auto pr-1 pb-16">
-      {savedItems.map((item) => (
-        <div
-          key={item.title}
-          className="bg-card border-[3px] border-[#2C1D11] dark:border-zinc-800 rounded-2xl p-4 flex gap-4 items-center shadow-[0_4px_0_0_#2C1D11] dark:shadow-[0_4px_0_0_rgba(0,0,0,0.4)] hover:translate-y-[-1px] hover:shadow-[0_5px_0_0_#2C1D11] transition-all"
-        >
-          {item.thumbnail ? (
-            <img
-              src={item.thumbnail}
-              alt={item.title}
-              className="w-16 h-16 rounded-xl object-cover border-2 border-[#2C1D11] dark:border-zinc-700 select-none flex-shrink-0"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-xl bg-[#f4edd9] dark:bg-zinc-800 border-2 border-[#2C1D11] dark:border-zinc-700 flex items-center justify-center text-xl flex-shrink-0 select-none">
-              📖
-            </div>
-          )}
+      {savedItems.map((item) => {
+        const savedThumbnail = item.thumbnail || (item.source === "Hacker News" ? "/hn_fallback.png" : null);
+        return (
+          <div
+            key={item.title}
+            className="bg-card border-[3px] border-[#2C1D11] dark:border-zinc-800 rounded-2xl p-4 flex gap-4 items-center shadow-[0_4px_0_0_#2C1D11] dark:shadow-[0_4px_0_0_rgba(0,0,0,0.4)] hover:translate-y-[-1px] hover:shadow-[0_5px_0_0_#2C1D11] transition-all"
+          >
+            {savedThumbnail ? (
+              <img
+                src={savedThumbnail}
+                alt={item.title}
+                className="w-16 h-16 rounded-xl object-cover border-2 border-[#2C1D11] dark:border-zinc-700 select-none flex-shrink-0"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-xl bg-[#f4edd9] dark:bg-zinc-800 border-2 border-[#2C1D11] dark:border-zinc-700 flex items-center justify-center text-xl flex-shrink-0 select-none">
+                📖
+              </div>
+            )}
 
           <div className="flex-1 flex flex-col gap-1 overflow-hidden">
             <h4 className="font-serif text-base font-extrabold text-foreground truncate select-text">
@@ -79,7 +82,7 @@ export default function SavedGists({ onRemoveItem }: SavedGistsProps) {
                 rel="noopener noreferrer"
                 className="font-sans text-[10px] font-black text-coral uppercase tracking-wider border-b border-dashed border-coral/50 hover:border-coral"
               >
-                Wikipedia ↗
+                {item.source || "Wikipedia"} ↗
               </a>
             </div>
           </div>
@@ -92,7 +95,8 @@ export default function SavedGists({ onRemoveItem }: SavedGistsProps) {
             <CloseIcon className="w-4 h-4" />
           </button>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
